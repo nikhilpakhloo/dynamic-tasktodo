@@ -1,97 +1,128 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# Dynamic Todo App
 
-# Getting Started
+A polished React Native todo app built to demonstrate practical mobile app architecture: Redux state management, offline persistence, animated list interactions, progress tracking, dark/light theming, and a clean component structure.
 
-> **Note**: Make sure you have completed the [Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment) guide before proceeding.
+## Features
 
-## Step 1: Start Metro
+- Add, edit, delete, and complete todos.
+- Undo the most recently deleted todo.
+- Hide editing for completed tasks.
+- Persist todos locally with AsyncStorage.
+- Validate persisted todo data before restoring it.
+- Track completion progress with `react-native-progress`.
+- Smooth todo row animations with `react-native-reanimated`.
+- Global state with Redux Toolkit.
+- System-aware light and dark themes.
+- Centralized UI strings and theme color tokens.
+- Keyboard-aware list layout for long todo lists.
+- BootSplash integration.
+- Shared app icon for Android and iOS.
 
-First, you will need to run **Metro**, the JavaScript build tool for React Native.
+## Tech Stack
 
-To start the Metro dev server, run the following command from the root of your React Native project:
+- React Native
+- TypeScript
+- Redux Toolkit
+- React Redux
+- AsyncStorage
+- react-native-progress
+- react-native-reanimated
+- react-native-bootsplash
+- react-native-safe-area-context
 
-```sh
-# Using npm
-npm start
+## Project Structure
 
-# OR using Yarn
-yarn start
+```txt
+src/
+  components/
+    ProgressSummary.tsx
+    TodoInput.tsx
+    TodoItem.tsx
+  constants/
+    strings.ts
+  store/
+    index.ts
+    todoSlice.ts
+  theme/
+    theme.tsx
+  types/
+    todo.ts
+  utils/
+    storage.ts
 ```
 
-## Step 2: Build and run your app
+## Local Setup
 
-With Metro running, open a new terminal window/pane from the root of your React Native project, and use one of the following commands to build and run your Android or iOS app:
+Make sure your React Native environment is ready before running the app:
 
-### Android
+- Node.js `>= 22.11.0`
+- Android Studio and an Android emulator for Android
+- Xcode and CocoaPods for iOS
+
+Install dependencies:
 
 ```sh
-# Using npm
-npm run android
-
-# OR using Yarn
-yarn android
+npm install
 ```
 
-### iOS
-
-For iOS, remember to install CocoaPods dependencies (this only needs to be run on first clone or after updating native deps).
-
-The first time you create a new project, run the Ruby bundler to install CocoaPods itself:
+For iOS, install pods:
 
 ```sh
+cd ios
 bundle install
-```
-
-Then, and every time you update your native dependencies, run:
-
-```sh
 bundle exec pod install
+cd ..
 ```
 
-For more information, please visit [CocoaPods Getting Started guide](https://guides.cocoapods.org/using/getting-started.html).
+## Run Locally
+
+Start Metro:
 
 ```sh
-# Using npm
-npm run ios
-
-# OR using Yarn
-yarn ios
+npm start
 ```
 
-If everything is set up correctly, you should see your new app running in the Android Emulator, iOS Simulator, or your connected device.
+In a second terminal, run Android:
 
-This is one way to run your app — you can also build it directly from Android Studio or Xcode.
+```sh
+npm run android
+```
 
-## Step 3: Modify your app
+Or run iOS:
 
-Now that you have successfully run the app, let's make changes!
+```sh
+npm run ios
+```
 
-Open `App.tsx` in your text editor of choice and make some changes. When you save, your app will automatically update and reflect these changes — this is powered by [Fast Refresh](https://reactnative.dev/docs/fast-refresh).
+You can also open the native projects directly:
 
-When you want to forcefully reload, for example to reset the state of your app, you can perform a full reload:
+- Android: `android/` in Android Studio
+- iOS: `ios/todo.xcworkspace` in Xcode
 
-- **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Dev Menu**, accessed via <kbd>Ctrl</kbd> + <kbd>M</kbd> (Windows/Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (macOS).
-- **iOS**: Press <kbd>R</kbd> in iOS Simulator.
+## Quality Checks
 
-## Congratulations! :tada:
+Run lint:
 
-You've successfully run and modified your React Native App. :partying_face:
+```sh
+npm run lint
+```
 
-### Now what?
+Run TypeScript validation:
 
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [docs](https://reactnative.dev/docs/getting-started).
+```sh
+npx tsc --noEmit
+```
 
-# Troubleshooting
+Run tests, if test files are added:
 
-If you're having issues getting the above steps to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
+```sh
+npm test
+```
 
-# Learn More
+## Implementation Notes
 
-To learn more about React Native, take a look at the following resources:
+Todos are stored in Redux and persisted through AsyncStorage after hydration. Saves are debounced to avoid unnecessary writes during rapid changes. Stored data is validated before being restored into state, which keeps the app resilient if local storage contains malformed data.
 
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+The progress summary derives completed count and percentage from the todo list using memoization. Todo rows are memoized and receive stable callbacks from the parent list, keeping rendering efficient as the list grows.
+
+The app theme follows the system color scheme. UI strings and colors are centralized so components stay readable and maintainable.

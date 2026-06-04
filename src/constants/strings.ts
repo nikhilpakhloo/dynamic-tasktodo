@@ -1,0 +1,21 @@
+export const STRINGS = {
+  appTitle: 'Dynamic Todo',
+  appSubtitle: 'Plan the work. Finish the work.',
+  addTodoPlaceholder: 'Add a task',
+  addTodoAccessibilityLabel: 'Todo title',
+  addButton: 'Add',
+  progressTitle: 'Progress',
+  progressPercentage: (percentage: number) => `${percentage}% complete`,
+  progressCount: (completedCount: number, totalCount: number) =>
+    `${completedCount} of ${totalCount} tasks complete`,
+  deletedTodo: (title: string) => `Deleted "${title}"`,
+  undoButton: 'Undo',
+  emptyTitle: 'No tasks yet',
+  emptyDescription: 'Add your first task to start tracking progress.',
+  editTodoAccessibilityLabel: 'Edit todo title',
+  saveButton: 'Save',
+  cancelButton: 'Cancel',
+  editButton: 'Edit',
+  deleteButton: 'Delete',
+  checkMark: '✓',
+} as const;
