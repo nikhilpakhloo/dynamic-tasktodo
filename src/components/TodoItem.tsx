@@ -1,5 +1,6 @@
-import React, { memo, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { memo, useCallback, useMemo, useState } from 'react';
 import {
+  Keyboard,
   StyleSheet,
   Text,
   TextInput,
@@ -7,12 +8,7 @@ import {
   View,
 } from 'react-native';
 import Animated, {
-  FadeInDown,
   FadeOutLeft,
-  LinearTransition,
-  useAnimatedStyle,
-  useSharedValue,
-  withSpring,
 } from 'react-native-reanimated';
 import { STRINGS } from '../constants/strings';
 import { useTheme, type AppTheme } from '../theme/theme';
@@ -30,26 +26,6 @@ function TodoItem({ todo, onDelete, onEdit, onToggle }: TodoItemProps) {
   const styles = useMemo(() => createStyles(theme), [theme]);
   const [isEditing, setIsEditing] = useState(false);
   const [draftTitle, setDraftTitle] = useState(todo.title);
-  const completionScale = useSharedValue(todo.completed ? 1 : 0);
-
-  useEffect(() => {
-    completionScale.value = withSpring(todo.completed ? 1 : 0, {
-      damping: 14,
-      stiffness: 180,
-    });
-  }, [completionScale, todo.completed]);
-
-  const checkAnimatedStyle = useAnimatedStyle(() => ({
-    transform: [
-      {
-        scale: 1 + completionScale.value * 0.08,
-      },
-    ],
-  }));
-
-  const titleAnimatedStyle = useAnimatedStyle(() => ({
-    opacity: 1 - completionScale.value * 0.28,
-  }));
 
   const handleToggle = useCallback(() => {
     onToggle(todo.id);
@@ -70,6 +46,7 @@ function TodoItem({ todo, onDelete, onEdit, onToggle }: TodoItemProps) {
   }, [todo.title]);
 
   const handleSaveEdit = useCallback(() => {
+    Keyboard.dismiss();
     const trimmedTitle = draftTitle.trim();
 
     if (!trimmedTitle) {
@@ -82,23 +59,19 @@ function TodoItem({ todo, onDelete, onEdit, onToggle }: TodoItemProps) {
 
   return (
     <Animated.View
-      entering={FadeInDown.duration(220).springify()}
       exiting={FadeOutLeft.duration(180)}
-      layout={LinearTransition.springify().damping(18).stiffness(180)}
       style={styles.container}
     >
-      <Animated.View style={checkAnimatedStyle}>
-        <TouchableOpacity
-          accessibilityRole="checkbox"
-          accessibilityState={{ checked: todo.completed }}
-          onPress={handleToggle}
-          style={[styles.check, todo.completed && styles.checkComplete]}
-        >
-          <Text style={styles.checkText}>
-            {todo.completed ? STRINGS.checkMark : ''}
-          </Text>
-        </TouchableOpacity>
-      </Animated.View>
+      <TouchableOpacity
+        accessibilityRole="checkbox"
+        accessibilityState={{ checked: todo.completed }}
+        onPress={handleToggle}
+        style={[styles.check, todo.completed && styles.checkComplete]}
+      >
+        <Text style={styles.checkText}>
+          {todo.completed ? STRINGS.checkMark : ''}
+        </Text>
+      </TouchableOpacity>
 
       <View style={styles.content}>
         {isEditing ? (
@@ -112,16 +85,12 @@ function TodoItem({ todo, onDelete, onEdit, onToggle }: TodoItemProps) {
             style={styles.editInput}
           />
         ) : (
-          <Animated.Text
+          <Text
             numberOfLines={2}
-            style={[
-              styles.title,
-              titleAnimatedStyle,
-              todo.completed && styles.titleComplete,
-            ]}
+            style={[styles.title, todo.completed && styles.titleComplete]}
           >
             {todo.title}
-          </Animated.Text>
+          </Text>
         )}
       </View>
 

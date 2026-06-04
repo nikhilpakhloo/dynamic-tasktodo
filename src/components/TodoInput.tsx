@@ -5,6 +5,7 @@ import {
   TextInput,
   TouchableOpacity,
   View,
+  Keyboard,
 } from 'react-native';
 import { STRINGS } from '../constants/strings';
 import { useTheme, type AppTheme } from '../theme/theme';
@@ -19,6 +20,8 @@ function TodoInput({ onAddTodo }: TodoInputProps) {
   const [title, setTitle] = useState('');
 
   const handleAddTodo = useCallback(() => {
+    Keyboard.dismiss();
+
     const trimmedTitle = title.trim();
 
     if (!trimmedTitle) {
