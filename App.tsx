@@ -155,7 +155,7 @@ function TodoApp() {
           <Text style={styles.subtitle}>{STRINGS.appSubtitle}</Text>
 
           <TodoInput onAddTodo={handleAddTodo} />
-          <ProgressSummary todos={todos} />
+          {todos.length > 0 ? <ProgressSummary todos={todos} /> : null}
 
           {lastDeletedTodo ? (
             <View style={styles.undoBar}>

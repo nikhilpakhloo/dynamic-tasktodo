@@ -7,9 +7,6 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import Animated, {
-  FadeOutLeft,
-} from 'react-native-reanimated';
 import { STRINGS } from '../constants/strings';
 import { useTheme, type AppTheme } from '../theme/theme';
 import type { Todo } from '../types/todo';
@@ -58,10 +55,7 @@ function TodoItem({ todo, onDelete, onEdit, onToggle }: TodoItemProps) {
   }, [draftTitle, onEdit, todo.id]);
 
   return (
-    <Animated.View
-      exiting={FadeOutLeft.duration(180)}
-      style={styles.container}
-    >
+    <View style={styles.container}>
       <TouchableOpacity
         accessibilityRole="checkbox"
         accessibilityState={{ checked: todo.completed }}
@@ -136,7 +130,7 @@ function TodoItem({ todo, onDelete, onEdit, onToggle }: TodoItemProps) {
           </TouchableOpacity>
         </View>
       )}
-    </Animated.View>
+    </View>
   );
 }
 

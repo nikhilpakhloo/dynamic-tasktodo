@@ -10,7 +10,6 @@ A polished React Native todo app built to demonstrate practical mobile app archi
 - Persist todos locally with AsyncStorage.
 - Validate persisted todo data before restoring it.
 - Track completion progress with `react-native-progress`.
-- Smooth todo row animations with `react-native-reanimated`.
 - Global state with Redux Toolkit.
 - System-aware light and dark themes.
 - Centralized UI strings and theme color tokens.
